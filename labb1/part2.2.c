@@ -27,12 +27,18 @@ int main() {
 
     // read from the queue
     mq_receive(mqd, buf, sizeof(buf), NULL);
-    printf("The message is: %s", buf);
+    printf("The message is: %s\n", buf);
 
     int count = 0;
-    for (int i = 0; i < sizeof(buf); i++) {
-        printf("%c", buf[i]); // test, lägg till count
+    for (int i = 0; buf[i] != '\0'; i++) {
+
+        if (buf[i] == ' ' && buf[i+1] != ' ')
+
+            count++;    
+
     }
+
+    printf("Number of words in given string are: %d\n", count + 1);
     
     // close 
     mq_close(mqd);
