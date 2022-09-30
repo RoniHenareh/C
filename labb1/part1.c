@@ -3,43 +3,45 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#define BUFFER_SIZE 100
-
-int fd[2];
-char read_message[BUFFER_SIZE];
-char write_message[BUFFER_SIZE] = "Hello World";
-
 // pipe: fd[0] för att läsa, fd[1] för att skriva
 
 int main() {
 
+    int status;
+    pid_t pid;
+    int fd[2];
+
     pipe(fd); // skapar pipe
 
-    int test = fork();
-    printf("test: %d\n", test);
+    pid = fork();
+    printf("test: %d\n", pid);
 
-    switch(test) {
+    switch(pid) {
 
-        case -1: // fel
+        case -1: // felhantering
             break;
 
         case 0: // child
 
-            close(fd[1]); // ska bara läsa så vi stänger skriva
-            read(fd[0], read_message, BUFFER_SIZE);
-            printf("The message is: %s\n", read_message);
-
+            dup2(fd[1], STDOUT_FILENO); // agerar |
+            close(fd[1]); 
+            close(fd[0]);
+           
             // fixa
-            execl("/bin/ls", "/bin/ls", "/", "|", NULL); // execute ls / |
+            execlp("ls", "ls", "/", NULL); // execute ls / 
 
             break;
 
         default: // parent
-            close(fd[0]); // ska bara skriva så vi stänger läsa
-            write(fd[1], write_message, strlen(write_message) + 1);
-            
+
+            pid = wait(&status); // wait for child process
+
+            dup2(fd[0], STDOUT_FILENO);
+            close(fd[0]);
+            close (fd[1]);
+           
             // fixa
-            execl("/bin/ls", "/bin/ls", "wc -l", NULL); // execute wc -l
+            execlp("wc", "wc", "-l", NULL); // execute wc -l
 
             break;
     }
