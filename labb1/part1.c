@@ -28,7 +28,7 @@ int main() {
             close(fd[0]);
            
             // fixa
-            execlp("ls", "ls", "/", NULL); // execute ls / 
+            execl("ls", "ls", "/", NULL); // execute ls / 
 
             break;
 
@@ -41,7 +41,7 @@ int main() {
             close (fd[1]);
            
             // fixa
-            execlp("wc", "wc", "-l", NULL); // execute wc -l
+            execl("wc", "wc", "-l", NULL); // execute wc -l
 
             break;
     }
