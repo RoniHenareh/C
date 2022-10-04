@@ -15,19 +15,22 @@ mqd_t mqd, mqs;
 
 int main() {
 
-    attr.mq_flags=0;
-    attr.mq_maxmsg=MAX;
-    attr.mq_msgsize=8192;
-    attr.mq_curmsgs=0;
+    struct  mq_attr attr = {
+
+        .mq_flags=0,
+        .mq_maxmsg=10,
+        .mq_msgsize=MAX,
+        .mq_curmsgs=0
+    };
 
     // file pointer
-    FILE *filePointer ;
+    FILE *filePointer;
      
     // det vi skickar
     char message[MAX];
 
     // Open txt-file with fopen() and read
-    filePointer = fopen("part2.txt", "r") ;
+    filePointer = fopen("part2.txt", "r");
      
     // felhantera
     if (filePointer == NULL) {
@@ -49,8 +52,8 @@ int main() {
         printf("The file is now closed\n") ;
     }
 
-    //mqd = mq_open("/mymq", O_CREAT | O_RDWR, 0744, &attr);
-    mqd = mq_open(my_mq, O_CREAT | O_RDONLY, 0644, &attr);
+   
+    mqd = mq_open(my_mq, O_CREAT | O_WRONLY, 0644, &attr);
     printf("detta bör inte bli -1: %i\n", mqd);
     
     mqs = mq_send(mqd, message, strlen(message) + 1, 0);
