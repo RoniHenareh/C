@@ -14,7 +14,7 @@ int main() {
     pipe(fd); // skapar pipe
 
     pid = fork();
-    printf("test: %d\n", pid);
+    //printf("test: %d\n", pid);
 
     switch(pid) {
 
@@ -28,7 +28,10 @@ int main() {
             close(fd[0]);
            
             // fixa
-            execl("ls", "ls", "/", NULL); // execute ls / 
+            execl("/bin/ls", "/bin/ls", "/", NULL); // execute ls / 
+
+            //char* args1[] = {"ls", "/", NULL};
+            //execv("/bin/ls", args1);
 
             break;
 
@@ -41,7 +44,10 @@ int main() {
             close (fd[1]);
            
             // fixa
-            execl("wc", "wc", "-l", NULL); // execute wc -l
+            execl("/bin/wc", "/bin/wc", "-l", NULL); // execute wc -l
+
+            //char* args2[] = {"wc", "-l", NULL};
+            //execv("/bin/wc", args2);  
 
             break;
     }
