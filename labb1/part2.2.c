@@ -11,6 +11,7 @@
 #define MQ_MODE (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 
 char *my_mq = "/mymq";
+//char buf[MAX_SIZE] = "Roni Henareh"; // funkar
 char buf[MAX_SIZE];
 mqd_t mqd;
 

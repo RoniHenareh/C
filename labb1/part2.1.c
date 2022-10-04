@@ -1,17 +1,17 @@
 // Producer
 
 #include <stdio.h>
-#include <string.h>
+#include <string.h> 
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <mqueue.h> 
+#include <mqueue.h>     
 
 #define MAX 100
 
 struct  mq_attr attr;
 
 char *my_mq = "/mymq";
-mqd_t mqd;
+mqd_t mqd, mqs;
 
 int main() {
 
@@ -49,12 +49,13 @@ int main() {
         printf("The file is now closed\n") ;
     }
 
-    // O_WRONLY (write only)
-    mqd = mq_open("/mymq", O_CREAT|O_RDWR,0744,&attr);
-    printf("detta ska inte bli -1: %i\n", mqd);
-
-    mq_send(mqd, message, strlen(message) + 1, 0);
+    //mqd = mq_open("/mymq", O_CREAT | O_RDWR, 0744, &attr);
+    mqd = mq_open(my_mq, O_CREAT | O_RDONLY, 0644, &attr);
+    printf("detta bör inte bli -1: %i\n", mqd);
     
+    mqs = mq_send(mqd, message, strlen(message) + 1, 0);
+    printf("detta bör inte bli -1: %i\n", mqs);
+
     mq_close(mqd);
 
 	return 0;
